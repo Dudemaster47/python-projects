@@ -9,7 +9,6 @@ from random import randrange
 # so tic tac toe.
 
 # first thing's first, we need a matrix of 3 rows, for 9 panels.
-# next, each space needs an id so that players can easily select these spaces. for now, this can just be a list- easy to navigate, and doesn't really have to be connected to the matrix.
 # i suppose each space should also have a marker that determines if it's a valid target or not. this CAN be yet another list, since that lets us tie it to the spaceIds later by them sharing indexes.
 # additionally we'll have a set of player ids that are preset at 1 and 2. there's really no reason to make it dynamic, since no matter what there's gonna be two players
 # even if one of the players is the computer.
@@ -22,8 +21,8 @@ from random import randrange
 # clear the gameboard
 
 def ticTacToe():
+    #gameboard and ownedSpaces could probably be a dictionary to save memory/space/code spaghetti? hm
     gameboard = [[" ", " ", " "], [" ", " ", " "], [" ", " ", " "]]
-    spaceIds = [1, 2, 3, 4, 5, 6, 7, 8, 9]
     ownedSpaces = [0, 0, 0, 0, 0, 0, 0, 0, 0]
     noPlayers = howManyPlayers()
     playerIds = [1, 2]
@@ -75,3 +74,26 @@ def CPUturn(ownedSpaces):
         CPUturn(ownedSpaces)
 
 # as simple as the computer picks a spot at random. i don't feel like applying actual logic here.
+
+#ok what's next. win detection? probably win detection.
+
+def winDetector(ownedSpaces):
+    #so really this just needs to run after every turn.
+    #i just have to check each possible "win" condition and see if a single player owns a series of spaces that indicates victory.
+    #or if there's a tie after 9 turns have elapsed.
+    #this can be done by iterating over owned spaces and checking if any of the win trios are owned by a single player
+    #however there's probably a better way to do this than a million conditionals
+    #and also, the last time i tried a million conditionals it just broke
+    #i can probably make a list or a dictionary of win conditions
+    #win conditions being...
+    #0 1 2, 3 4 5, 6 7 8, 0 3 6, 1 4 7, 2 5 8, 0 4 8, and 2 4 6.
+    #since ownedspaces holds data for which player has which space...
+    #how to check the IDs in a reasonable way that doesn't go back to the "million conditionals"?
+    #i could make a dictionary with the ids 0, 1, and 2, corresponding to empty lists.
+    #iterate over owned spaces, storing each space's id into the corresponding dictionary index
+    #once done, I can check the dictionary indices against the win conditions, with an index containing any of the three ids matching a win condition moving to a victory function
+    #if no win condition is found but all spaces are owned, it moves to a tie function
+    #otherwise the game continues
+    #yeah this could work
+    #...just pseudocode for rn tho because my head is kinda fuzzy and im not feelin great today
+    
