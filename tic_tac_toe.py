@@ -96,4 +96,30 @@ def winDetector(ownedSpaces):
     #otherwise the game continues
     #yeah this could work
     #...just pseudocode for rn tho because my head is kinda fuzzy and im not feelin great today
+    winConditons = {
+        0 : [0, 1, 2],
+        1 : [3, 4, 5],
+        2 : [6, 7, 8],
+        3 : [0, 3, 6],
+        4 : [1, 4, 7],
+        5 : [2, 5, 8],
+        6 : [0, 4, 8],
+        7 : [2, 4, 6]
+    }
     
+    playerOwnedSpaces = {
+        0 : [],
+        1 : [],
+        2 : []
+    }
+    
+    for i in len(ownedSpaces):
+        playerOwnedSpaces[ownedSpaces[i]].append(i)
+        
+    
+    
+def victoryPrintout(player):
+    None
+
+def tiePrintout():
+    None
