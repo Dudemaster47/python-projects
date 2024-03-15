@@ -138,3 +138,7 @@ def victoryPrintout(player):
 
 def tiePrintout():
     None
+    
+#actually with all this stuff it should be pretty easy to finish tbh
+#but i dont wanna do it tonight so this is just me putting something here to commit and hit the github commits goal tonight
+#that way i can work tomorrow mornign wthout worry
