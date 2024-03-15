@@ -115,7 +115,7 @@ def winDetector(ownedSpaces):
     
     checker = False
     
-    for i in len(ownedSpaces):
+    for i in ownedSpaces:
         playerOwnedSpaces[ownedSpaces[i]].append(i)
         
     for key in winConditions:
