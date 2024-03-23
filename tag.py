@@ -89,7 +89,79 @@ def tag():
     def PlayerTurn(cpuDict, player):
         None
         #just gonna commit a few times to meet the deadline <_<
-    
+        #this is obnoxious. i hate the strike system.
+        #anyway in order to select valid options...
+        #first iterate thru NPCs and determine how many are taggable. 
+        #then check each direction and determine what moves are possible. 
+        #unlike NPCs, the player gets to move 3 after tagging to prevent tagbacks.
+        #regardless, these checks might as well happen regardless of whether or not the player CAN tag to cut down on needless complexity
+        taggable = ()
+        moveable = []
+        for key in cpuDict:
+            if(cpuDict[key][1]+1 == player[1] or cpuDict[key][1]-1 == player[1] or cpuDict[key][2]+1 == player[2] or cpuDict[key][2]-1 == player[2]):
+                taggable.append(key)
+        
+        #that just creates a list of viable tag options
+        
+        if player[0] == 1:
+            moveable2 = []
+            
+            for i in range(0, 8):
+                if i == 0 and player[1] > 1:
+                    moveable.append("up")
+                    if player[1] > 2:
+                        moveable2.append("up")
+                elif i == 1 and player[1] > 1 and player[2] < 6:
+                    moveable.append("up-right")
+                    if player[1] > 2 and player[2] < 5:
+                        moveable2.append("up-right")
+                elif i == 2 and player[2] < 6:
+                    moveable.append("right")
+                    if player[2] < 5:
+                        moveable2.append("right")
+                elif i == 3 and player [1] < 6 and player[2] < 6:
+                    moveable.append("down-right")
+                    if player[1] < 5 and player[2] < 5:
+                        moveable2.append("down-right")
+                elif i == 4 and player[1] < 6:
+                    moveable.append("down")
+                    if player[1] < 5:
+                        moveable2.append("down")
+                elif i == 5 and player[1] < 6 and player[2] > 1:
+                    moveable.append("down-left")
+                    if player[1] < 5 and player[2] > 2:
+                        moveable2.append("down-left")
+                elif i == 6 and player[2] > 1:
+                    moveable.append("left")
+                    if player[2] > 2:
+                        moveable2.append("left")
+                elif i == 7 and player[1] > 1 and player[2] > 1:
+                    moveable.append("up-left")
+                    if player[1] > 2 and player[2] > 2:
+                        moveable2.append("up-left")
+        else:
+            for i in range(0, 8):
+                if i == 0 and player[1] > 1:
+                    moveable.append("up")
+                    if player[1] > 2:
+                        moveable2.append("up")
+                elif i == 1 and player[1] > 0 and player[2] < 7:
+                    moveable.append("up-right")
+                elif i == 2 and player[2] < 7:
+                    moveable.append("right")
+                elif i == 3 and player [1] < 7 and player[2] < 7:
+                    moveable.append("down-right")
+                elif i == 4 and player[1] < 7:
+                    moveable.append("down")
+                elif i == 5 and player[1] < 7 and player[2] > 0:
+                    moveable.append("down-left")
+                elif i == 6 and player[2] > 0:
+                    moveable.append("left")
+                elif i == 7 and player[1] > 0 and player[2] > 0:
+                    moveable.append("up-left")
+                    
+        #THERE HAS TO BE A BETTER WAY
+        # however i don't know it and don't feel like looking. 
     def NPCTurn(cpuDict, player):
         #cpu movement rules:
         #generate a number between 0 and 7 for each NPC.
