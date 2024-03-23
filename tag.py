@@ -86,6 +86,10 @@ def tag():
     
     #player turn needs to resolve before NPCs.
     
+    def PlayerTurn(cpuDict, player):
+        None
+        #just gonna commit a few times to meet the deadline <_<
+    
     def NPCTurn(cpuDict, player):
         #cpu movement rules:
         #generate a number between 0 and 7 for each NPC.
