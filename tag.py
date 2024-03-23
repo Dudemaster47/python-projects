@@ -86,8 +86,7 @@ def tag():
     
     #player turn needs to resolve before NPCs.
     
-    def PlayerTurn(cpuDict, player):
-        None
+    def playerTurnChecks(cpuDict, player):
         #just gonna commit a few times to meet the deadline <_<
         #this is obnoxious. i hate the strike system.
         #anyway in order to select valid options...
@@ -97,6 +96,8 @@ def tag():
         #regardless, these checks might as well happen regardless of whether or not the player CAN tag to cut down on needless complexity
         taggable = ()
         moveable = []
+        moveable2 = []
+        
         for key in cpuDict:
             if(cpuDict[key][1]+1 == player[1] or cpuDict[key][1]-1 == player[1] or cpuDict[key][2]+1 == player[2] or cpuDict[key][2]-1 == player[2]):
                 taggable.append(key)
@@ -104,7 +105,6 @@ def tag():
         #that just creates a list of viable tag options
         
         if player[0] == 1:
-            moveable2 = []
             
             for i in range(0, 8):
                 if i == 0 and player[1] > 1:
@@ -161,7 +161,36 @@ def tag():
                     moveable.append("up-left")
                     
         #THERE HAS TO BE A BETTER WAY
-        # however i don't know it and don't feel like looking. 
+        return (taggable, moveable, moveable2)
+        
+        #anyway now that lists of viable options are available, 
+        #INCLUDING unnecessary iteration, because why not? fuck optimization.
+        #uhhhh
+        #player must be presented the choices! so fuck it let's make a choice list
+    def playerTurn(checkTuple):
+        taggable = checkTuple[0]
+        moveable = checkTuple[1]
+        moveable2 = checkTuple[2]
+        choices = []
+            
+        if len(taggable) > 0:
+            choices.append("tag")
+                
+        for i in moveable:
+            choices.append(i)
+            
+        print("Player turn.")
+        print(choices)
+        playerInput = input("Please select a valid action")
+            
+        while playerInput not in choices:
+            print("Invalid selection")
+            print(choices)
+            playerInput = input("Please select a valid action")
+                
+        return playerInput
+        #this requires more depth to handle all the bs BUT im tired so im done rn
+        
     def NPCTurn(cpuDict, player):
         #cpu movement rules:
         #generate a number between 0 and 7 for each NPC.
