@@ -134,7 +134,8 @@ def winDetector(ownedSpaces):
         return
     
 def victoryPrintout(player):
-    None
+    print("Player " + str(player) + " Wins!")
+    input("Would you like to play again? Y/N")
 
 def tiePrintout():
     None
@@ -142,3 +143,9 @@ def tiePrintout():
 #actually with all this stuff it should be pretty easy to finish tbh
 #but i dont wanna do it tonight so this is just me putting something here to commit and hit the github commits goal tonight
 #that way i can work tomorrow mornign wthout worry
+
+#WHOOPS THIS WEEK KILLED ME
+
+#the recursive inputs break so i'm gonna have to go back and fix those
+
+#UGH actually i hate this. im gonna do something else more fun. 
