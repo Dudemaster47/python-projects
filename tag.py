@@ -23,10 +23,9 @@ def tag():
              [".",".",".",".",".",".","."], 
              [".",".",".",".",".",".","."], 
              [".",".",".",".",".",".","."]]
-    playerIconRunner = "P"
-    playerIconTagger = "O"
-    cpuIconRunner = "R"
-    cpuIconTagger = "T"
+    
+    #player starts as a runner, dead center.
+    player = [0, 4, 4]
     
     def cpuStartGenerator():
         #CPU starting locations should be randomized, but characters cannot occupy the same space. That means that in order to generate starting positions, I need to first generate a set of lists that I add to until the length is equal to the number of CPUs.
@@ -54,8 +53,114 @@ def tag():
         
     cpuDict = cpuStartGenerator()
     
-    def gameGeneration(board, cpuDict):
-    #player starts as a runner, dead center.
-        player = [4, 4, 0]
+    def gameGeneration(board, player, cpuDict):
+    
+        for key in cpuDict:
+            if cpuDict[key][0] == 0:
+                board[cpuDict[key][1]][cpuDict[key][2]] = "R"
+            else:
+                board[cpuDict[key][1]][cpuDict[key][2]] = "T"
 
+        #this should spawn in the CPUs
+        if player[0] == 0:
+            board[player[1]][player[2]] = "P"
+        else: 
+            board[player[1]][player[2]] = "O"
+        #this should spawn in the player    
+        
+        return board
+    
+    board = gameGeneration(board, player, cpuDict)
+    
+    #okay, now we generate CPUS and create a board.
+    #next up: turns.
+    #the player has a list of actions:
+    #tag an adjacent character
+    #or move one tile in any of 8 directions.
+    #because the tagger is at a disadvantage, taggers move twice as far with a single movement. 
+    #to handle movement, all characters need to be able to detect boundaries of the board. 
+    #additionally, for the player, there are less error messages to deal with if it only gives them the option to select choices that are valid.
+    #then it's just "invalid selection" for all bad inputs.
+    
+    #remember: FIRST NUMBER IS Y COORD SECOND IS X COORD
+    
+    #player turn needs to resolve before NPCs.
+    
+    def NPCTurn(cpuDict, player):
+        #cpu movement rules:
+        #generate a number between 0 and 7 for each NPC.
+        #this number determines what direction the NPC moves.
+        #if the NPC can't move in that direction, it doesn't move this tick.
+        #that... should work?
+        
+        #Update the NPCs.
+        for key in cpuDict:
+            npcMovement = random.randrange(0, 8)
+            if cpuDict[key][0] == 1:
+                y = cpuDict[key][1]
+                x = cpuDict[key][2]
+                
+                if (player[1]+1 == y or player[1]-1 == y or player[2]+1 == x or player[2]-1 == x):
+                    print("You got tagged!")
+                    cpuDict[key][0] = 0
+                    player[0] = 1
+                    
+                    #this should ensure the tagger prioritizes the player
+                else:
+                    for key2 in cpuDict:
+                        if(cpuDict[key2][1]+1 == y or cpuDict[key2][1]-1 == y or cpuDict[key2][2]+1 == x or cpuDict[key2][2]-1 == x):
+                            #THAT should work in all cases i think. since any number of these being true passes, it should identify the first character to be next to it
+                            print("An NPC got tagged!")
+                            cpuDict[key2][0] = 1
+                            cpuDict[key][0] = 0
+                            break
+                        else:
+                            if npcMovement == 0 and cpuDict[key][1] > 1:
+                                cpuDict[key][1] -= 2
+                            elif npcMovement == 1 and cpuDict[key][1] > 1 and cpuDict[key][2] < 6:
+                                cpuDict[key][1] -= 2
+                                cpuDict[key][2] += 2
+                            elif npcMovement == 2 and cpuDict[key][2] < 6:
+                                cpuDict[key][2] += 2
+                            elif npcMovement == 3 and cpuDict[key][1] < 6 and cpuDict[key][2] < 6:
+                                cpuDict[key][1] += 2
+                                cpuDict[key][2] += 2
+                            elif npcMovement == 4 and cpuDict[key][1] < 6:
+                                cpuDict[key][1] += 2
+                            elif npcMovement == 5 and cpuDict[key][1] < 6 and cpuDict[key][2] > 1:
+                                cpuDict[key][1] += 2
+                                cpuDict[key][2] -= 2
+                            elif npcMovement == 6 and cpuDict[key][2] > 1:
+                                cpuDict[key][2] -=2
+                            elif npcMovement == 7 and cpuDict[key][1] > 1 and cpuDict[key][2] > 1:
+                                cpuDict[key][1] -= 2
+                                cpuDict[key][2] -= 2
+            else:
+                if npcMovement == 0 and cpuDict[key][1] > 0:
+                    cpuDict[key][1] -= 1
+                elif npcMovement == 1 and cpuDict[key][1] > 0 and cpuDict[key][2] < 7:
+                    cpuDict[key][1] -= 1
+                    cpuDict[key][2] += 1
+                elif npcMovement == 2 and cpuDict[key][2] < 7:
+                    cpuDict[key][2] += 1
+                elif npcMovement == 3 and cpuDict[key][1] < 7 and cpuDict[key][2] < 7:
+                    cpuDict[key][1] += 1
+                    cpuDict[key][2] += 1
+                elif npcMovement == 4 and cpuDict[key][1] < 7:
+                    cpuDict[key][1] += 1
+                elif npcMovement == 5 and cpuDict[key][1] < 7 and cpuDict[key][2] > 0:
+                    cpuDict[key][1] += 1
+                    cpuDict[key][2] -= 1
+                elif npcMovement == 7 and cpuDict[key][2] > 0:
+                    cpuDict[key][2] -=1
+                elif npcMovement == 7 and cpuDict[key][1] > 0 and cpuDict[key][2] > 0:
+                    cpuDict[key][1] -= 1
+                    cpuDict[key][2] -= 1
+                    
+                return [cpuDict, player]
+    
+    updateList = NPCTurn(cpuDict, player)    
+    cpuDict = updateList[0]
+    player = updateList[1] 
+                         
 tag()
